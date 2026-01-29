@@ -1,21 +1,11 @@
 :root {
     --side-padding: 2rem;
 
-    --bg-color: #ffffff;
-    --text-color: #000000;
-    --primary-color: #1565a7;
-
-    @media (prefers-color-scheme: dark) {
-        --bg-color: #121212;
-        --text-color: #ffffff;
-        --primary-color: #d4a54f;
-    }
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --primary-color: #d4a54f;
 }
 
-@font-face {
-    font-family: Jacquard12;
-    src: url(assets/fonts/Jacquard_12/Jacquard12-Regular.ttf);
-}
 @font-face {
     font-family: ShareTechMono;
     src: url(assets/fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf);
@@ -25,7 +15,7 @@ body {
     font-family: ShareTechMono;
     background-color: var(--bg-color);
     color: var(--text-color);
-    padding: 0 var(--side-padding);
+    margin: 1rem;
 }
 
 h1 {
@@ -34,10 +24,48 @@ h1 {
     text-align: center;
 }
 
+pre {
+    margin: 0;
+    font-family: monospace;
+}
+
+#main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    height: calc(100dvh - 2 * 1rem);
+}
+
+.text-content {
+    padding: 0 var(--side-padding);
+}
+
+#gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: end;
+
+    & > div {
+        display: inherit;
+        overflow: hidden;
+    }
+}
+
+#cro {
+    justify-content: start;
+}
 #cat {
-    position: absolute;
-    margin: 1em;
-    right: 0;
-    bottom: 0;
-    font-size: 1rem;
+    justify-self: end;
+}
+
+@media (max-width: 1250px) {
+    #gallery {
+        grid-template-columns: 1fr;
+
+        & .ascii-art {
+            justify-self: center;
+            margin: 1rem 0;
+        }
+    }
 }
