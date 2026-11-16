@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>Vlcaak's Lair</title>
     <meta charset="UTF-8">
@@ -9,22 +10,56 @@
     <meta property="og:url" content="https://vlcaak.net">
     <meta property="og:type" content="website">
 
-    <link href="styles.css" rel="stylesheet" type="text/css">
+    <link href="/style/common.css" rel="stylesheet" type="text/css">
+    <link href="./styles.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div id="main-content">
-        <div class="text-content">
+    <main>
+        <div>
             <h1>Vlcaak's Lair</h1>
-            <p>The awesome contents of this site are being worked on. You can adore this cute cro and car loaf in the meanwhile<span class="three-dots">...</span></p>
         </div>
-        <div id="gallery">
-            <div>
+        <div id="content-panel">
+            <div class="art-showcase">
+                <div class="frame frame-top-left"></div>
+                <div class="frame frame-bottom-right"></div>
                 <pre id="cro" class="ascii-art"></pre>
             </div>
             <div>
-                <pre id="cat" class="ascii-art"></pre>
-            </div> 
+                <div>
+                    <p><b>Hi :&gt;</b></p>
+                    <p>I'm a computer engineering student with a genuine passion for programming who also draws from time to time.</p>
+                    <p>My life goal is to make a <b>meaningful</b> contribution to the world of open source<span class="three-dots"></span></p>
+                    <p style="text-align: right;"><span class="three-dots"></span>something our society could benefit from.</p>
+                    <p>
+                        But apart from that- hmm, well actually, in pursuit of this goal, I work on my little projects in my free time, hoping that, some day, these insights will be of use to somebody. 
+                        <br>
+                        And if not, believe that I alone enjoyed the whole hike from the base to the summit when working on these.
+                    </p>
+                </div>
+                <div>
+                    <h2><a href="/projects/">Projects</a></h2>
+                    <p>Here are some of my egnineering projects that I deemed relevant enough to pin here, not sorted in any particular order:</p>
+                    <ul>
+                        <li><a href="/projects/derg-popup.html">derg-popup</a> - collection (2) of system info desktop app popups with a derg sprawled on top</li>
+                    </ul>
+                    <a href="/projects/">list all projects<span class="three-dots"></span></a>
+                </div>
+                <div>
+                    <h2><a href=/gallery/>Art gallery</a></h2>
+                    <p>In addition to all this, I've been trying to get myself into drawing, to contrast the field I study. I feel like I could get good at this if I lock in. I do think a lot about wanting to draw something, but rarely act upon that.</p>
+                    <ul>
+                        <li><a href="/gallery/ascii/">ascii art gallery</a> - pure text there hehe</li>
+                    </ul>
+                    <a href="/gallery/">enter unified gallery<span class="three-dots"></span></a>
+                </div>
+            </div>
         </div>
+    </main>
+    <!-- hidden pre elem to determine the default width of ascii art -->
+    <div style="position: absolute; width: 0; height: 0; overflow: hidden;">
+        <pre id="font-size-test" style="position: absolute"></pre>
     </div>
-    <script src="script.js" type="module"></script>
+    <script src="script/ascii-art.js" type="module"></script>
+    <script src="script/three-dots.js"></script>
 </body>
+</html>
