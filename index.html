@@ -59,7 +59,7 @@
     <div style="position: absolute; width: 0; height: 0; overflow: hidden;">
         <pre id="font-size-test" style="position: absolute"></pre>
     </div>
-    <script src="script/ascii-art.js" type="module"></script>
-    <script src="script/three-dots.js"></script>
+    <script type="module">import('/script/ascii-art.js').then((mod) => mod.attach('breakpoint'))</script>
+    <script src="/script/three-dots.js"></script>
 </body>
 </html>

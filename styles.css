@@ -11,7 +11,6 @@ main {
     margin: 0;
 }
 
-
 #content-panel {
     display: grid;
     grid-template-columns: 1fr 1fr;

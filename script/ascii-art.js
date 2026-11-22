@@ -3,85 +3,98 @@ const resourceMap = {
     'cat': '/assets/gallery/ascii/cat.txt',
 };
 
-const flexColumnBreakpoint = 1250;
-let prevWindowWidth = null;
+class AsciiArt {
+    mode;
+    flexColumnBreakpoint = 1250;
+    prevWindowWidth = null;
 
-const loadedAsciiArt = new Map();
+    loadedAsciiArt = new Map();
 
-function fitAsciiArt(loadedAsciiArtMap) {
-    for (const [id, asciiArt] of loadedAsciiArtMap.entries()) {
-        const elem = document.getElementById(id);
-        if (!elem)
-            continue;
+    constructor(mode = 'breakpoint') {
+        this.mode = mode;
+    }
 
-        const width = parseFloat(getComputedStyle(document.querySelector('main')).width);
-        const prev = prevWindowWidth;
-        prevWindowWidth = width;
-        // prevent recomputing ascii art size when in flex column mode and only height changed (mobile adress bar) 
-        if (prev != null && prev <= flexColumnBreakpoint && width == prev)
-            continue;
+    fit() {
+        for (const [id, asciiArt] of this.loadedAsciiArt.entries()) {
+            const elem = document.getElementById(id);
+            if (!elem)
+                continue;
 
-        elem.style.width = '100%';
-        elem.style.height = '100%';
-        elem.textContent = null;
+            if (this.mode != 'fixed') {
+                const width = parseFloat(getComputedStyle(document.querySelector('main')).width);
+                const prev = this.prevWindowWidth;
+                this.prevWindowWidth = width;
+                const isFlex = this.mode == 'breakpoint' ? prev <= this.flexColumnBreakpoint : true;
+                // prevent recomputing ascii art size when in flex column mode and only height changed (mobile adress bar) 
+                if (prev != null && isFlex && width == prev)
+                    continue;
+            }
 
-        const parentRect = elem.getBoundingClientRect();
-        const parentWidth = parentRect.width;
-        const parentHeight = parentRect.height;
+            elem.style.width = '100%';
+            elem.style.height = '100%';
+            elem.textContent = null;
 
-        elem.style.width = 'initial';
-        elem.style.height = 'initial';
+            const parentRect = elem.getBoundingClientRect();
+            const parentWidth = parentRect.width;
+            const parentHeight = parentRect.height;
 
-        let widthRatio = parentWidth / asciiArt.width;
-        let heightRatio = parentHeight / asciiArt.height;
-        if (widthRatio == 0)
-            widthRatio = heightRatio;
-        if (heightRatio == 0)
-            heightRatio = widthRatio;
+            elem.style.width = 'initial';
+            elem.style.height = 'initial';
 
-        const minRatio = Math.min(widthRatio, heightRatio);
+            let widthRatio = parentWidth / asciiArt.width;
+            let heightRatio = parentHeight / asciiArt.height;
+            if (widthRatio == 0)
+                widthRatio = heightRatio;
+            if (heightRatio == 0)
+                heightRatio = widthRatio;
 
-        elem.style.fontSize = Math.floor(asciiArt.fontSize * minRatio) + "px";
-        elem.textContent = asciiArt.text;
+            const minRatio = Math.min(widthRatio, heightRatio);
+
+            elem.style.fontSize = Math.floor(asciiArt.fontSize * minRatio) + "px";
+            elem.textContent = asciiArt.text;
+        }
+    }
+
+    async load(resourceMap) {
+        const test = document.getElementById('font-size-test');
+        if (!test)
+            return;
+
+        const testFontSize = parseFloat(getComputedStyle(test).fontSize);
+
+        for (const [id, url] of Object.entries(resourceMap)) {
+            if (this.loadedAsciiArt.has(id))
+                continue;
+
+            const elem = document.getElementById(id);
+            if (!elem)
+                continue;
+
+            const asciiText = await fetch(url).then(res => res.text());
+
+            test.textContent = asciiText;
+            const asciiRect = test.getBoundingClientRect();
+            const asciiWidth = asciiRect.width;
+            const asciiHeight = asciiRect.height;
+            test.textContent = null;
+
+            const asciiObj = {
+                text: asciiText,
+                fontSize: testFontSize,
+                width: asciiWidth,
+                height: asciiHeight,
+            };
+
+            this.loadedAsciiArt.set(id, asciiObj);
+        }
     }
 }
 
-async function loadAsciiArt(resourceMap, loadedAsciiArtMap) {
-    const test = document.getElementById('font-size-test');
-    if (!test)
-        return;
-
-    const testFontSize = parseFloat(getComputedStyle(test).fontSize);
-
-    for (const [id, url] of Object.entries(resourceMap)) {
-        if (loadedAsciiArtMap.has(id))
-            continue;
-
-        const elem = document.getElementById(id);
-        if (!elem)
-            continue;
-
-        const asciiText = await fetch(url).then(res => res.text());
-
-        test.textContent = asciiText;
-        const asciiRect = test.getBoundingClientRect();
-        const asciiWidth = asciiRect.width;
-        const asciiHeight = asciiRect.height;
-        test.textContent = null;
-
-        const asciiObj = {
-            text: asciiText,
-            fontSize: testFontSize,
-            width: asciiWidth,
-            height: asciiHeight,
-        };
-
-        loadedAsciiArtMap.set(id, asciiObj);
-    }
+export function attach(mode = 'breakpoint') {
+    const asciiArt = new AsciiArt(mode);
+    window.addEventListener('load', async () => {
+        await asciiArt.load(resourceMap);
+        asciiArt.fit();
+    });
+    window.addEventListener('resize', () => asciiArt.fit());
 }
-
-window.addEventListener('load', async () => {
-    await loadAsciiArt(resourceMap, loadedAsciiArt);
-    fitAsciiArt(loadedAsciiArt);
-});
-window.addEventListener('resize', () => fitAsciiArt(loadedAsciiArt));
