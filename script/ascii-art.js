@@ -1,7 +1,21 @@
-const resourceMap = {
-    'cro': '/assets/gallery/ascii/cro.txt',
-    'cat': '/assets/gallery/ascii/cat.txt',
-};
+import * as asciiResources from '/script/ascii-resources.js';
+
+const fontSizeTest = 'font-size-test';
+
+// <div style="position: absolute; width: 0; height: 0; overflow: hidden;">
+//     <pre id="font-size-test" class="ascii-art" style="position: absolute"></pre>
+// </div>
+function createTestFontElem() {
+    const div = document.createElement('div');
+    div.style = 'position: absolute; width: 0; height: 0; overflow: hidden;';
+    const pre = document.createElement('pre');
+    div.appendChild(pre);
+    pre.id = fontSizeTest;
+    pre.className = 'ascii-art';
+    pre.style = 'position: absolute';
+
+    document.body.appendChild(div);
+}
 
 class AsciiArt {
     mode;
@@ -15,20 +29,20 @@ class AsciiArt {
     }
 
     fit() {
+        if (this.mode !== 'fixed') {
+            const width = parseFloat(getComputedStyle(document.querySelector('main')).width);
+            const prev = this.prevWindowWidth;
+            this.prevWindowWidth = width;
+            const isFlex = this.mode === 'breakpoint' ? prev <= this.flexColumnBreakpoint : true;
+            // prevent recomputing ascii art size when in flex column mode and only height changed (mobile adress bar) 
+            if (prev != null && isFlex && width === prev)
+                return;
+        }
+
         for (const [id, asciiArt] of this.loadedAsciiArt.entries()) {
             const elem = document.getElementById(id);
             if (!elem)
                 continue;
-
-            if (this.mode != 'fixed') {
-                const width = parseFloat(getComputedStyle(document.querySelector('main')).width);
-                const prev = this.prevWindowWidth;
-                this.prevWindowWidth = width;
-                const isFlex = this.mode == 'breakpoint' ? prev <= this.flexColumnBreakpoint : true;
-                // prevent recomputing ascii art size when in flex column mode and only height changed (mobile adress bar) 
-                if (prev != null && isFlex && width == prev)
-                    continue;
-            }
 
             elem.style.width = '100%';
             elem.style.height = '100%';
@@ -43,9 +57,9 @@ class AsciiArt {
 
             let widthRatio = parentWidth / asciiArt.width;
             let heightRatio = parentHeight / asciiArt.height;
-            if (widthRatio == 0)
+            if (widthRatio === 0)
                 widthRatio = heightRatio;
-            if (heightRatio == 0)
+            if (heightRatio === 0 || this.mode === 'flexColumn') // TODO: add flex in breakpoint mode
                 heightRatio = widthRatio;
 
             const minRatio = Math.min(widthRatio, heightRatio);
@@ -56,9 +70,11 @@ class AsciiArt {
     }
 
     async load(resourceMap) {
-        const test = document.getElementById('font-size-test');
-        if (!test)
-            return;
+        let test = document.getElementById('font-size-test');
+        if (!test) {
+            createTestFontElem();
+            test = document.getElementById('font-size-test');
+        }
 
         const testFontSize = parseFloat(getComputedStyle(test).fontSize);
 
@@ -90,11 +106,18 @@ class AsciiArt {
     }
 }
 
-export function attach(mode = 'breakpoint') {
+export async function attach(mode = 'breakpoint') {
     const asciiArt = new AsciiArt(mode);
-    window.addEventListener('load', async () => {
-        await asciiArt.load(resourceMap);
+
+    if (document.readyState === 'complete') {
+        await asciiArt.load(asciiResources.map);
         asciiArt.fit();
-    });
+    } else {
+        window.addEventListener('load', async () => {
+            await asciiArt.load(asciiResources.map);
+            asciiArt.fit();
+        });
+    }
+
     window.addEventListener('resize', () => asciiArt.fit());
 }
