@@ -57,9 +57,11 @@
     </main>
     <!-- hidden pre elem to determine the default width of ascii art -->
     <div style="position: absolute; width: 0; height: 0; overflow: hidden;">
-        <pre id="font-size-test" style="position: absolute"></pre>
+        <pre id="font-size-test" class="ascii-art" style="position: absolute"></pre>
     </div>
-    <script type="module">import('/script/ascii-art.js').then((mod) => mod.attach('breakpoint'))</script>
+    <script type="module">
+        import('/script/ascii-art.js').then(async (mod) => await mod.attach('breakpoint'));
+    </script>
     <script src="/script/three-dots.js"></script>
 </body>
 </html>

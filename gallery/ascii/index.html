@@ -6,11 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="/style/common.css" rel="stylesheet" type="text/css">
+    <link href="/style/gallery.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <main>
-        <p>under construction<span class="three-dots"></span></p>
+        <div class="image-gallery art-showcase">
+            <div class="ascii-art-container">
+                <pre id="cro" class="ascii-art"></pre>
+                <a href=/gallery/ascii/view.html?id=cro>cro.txt</a>
+            </div>
+            <div class="ascii-art-container">
+                <pre id="cat" class="ascii-art"></pre>
+                <a href=/gallery/ascii/view.html?id=cat>cat.txt</a>
+            </div>
+        </div>
     </main>
+    <script type="module">
+        import('/script/ascii-art.js').then(async (mod) => await mod.attach('flexColumn'));
+    </script>
     <script src="/script/three-dots.js"></script>
 </body>
 </html>
