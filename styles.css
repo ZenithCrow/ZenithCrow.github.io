@@ -18,24 +18,6 @@ main {
     height: 100%;
 }
 
-.art-showcase {
-    padding: 4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-
-    & > pre {
-        width: 100%;
-        height: 100%;
-    }
-
-    .frame {
-        width: 4rem;
-        height: 4rem;
-    }
-}
-
 @media (max-width: 1250px) {
     main {
         height: auto;

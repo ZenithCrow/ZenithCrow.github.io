@@ -1,0 +1,28 @@
+/* TODO: make it a two column flex container */
+.image-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+
+    & > pre {
+        width: 100%;
+    }
+}
+
+.ascii-art-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+@media(max-width: 1250px) {
+    .image-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .ascii-art-container {
+        gap: 1rem;
+    }
+}
