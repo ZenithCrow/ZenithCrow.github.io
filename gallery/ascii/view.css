@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.art-showcase {
+    width: calc(100dvw - 2 * 4rem);
+    height: calc(100dvh - 2 * 4rem);
+}
