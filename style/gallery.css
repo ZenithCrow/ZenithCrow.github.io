@@ -1,28 +1,51 @@
-/* TODO: make it a two column flex container */
 .image-gallery {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    display: block;
+    column-count: 2;
+    column-gap: 4rem;
+    margin: 4rem;
 
-    & > pre {
+    & > .art-container {
         width: 100%;
+        break-inside: avoid;
+        margin-top: 4rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    & img, & pre {
+        width: 100%;
+        display: block;
+        height: auto;
+        break-inside: avoid;
+    }
+
+    & img + p, & pre + a {
+        margin-top: 1rem;
     }
 }
 
-.ascii-art-container {
+.art-container {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
     align-items: center;
+    gap: 0;
 }
 
 @media(max-width: 1250px) {
     .image-gallery {
-        grid-template-columns: 1fr;
-    }
+        column-count: 1;
+        column-gap: 2rem;
+        margin: 2rem;
 
-    .ascii-art-container {
-        gap: 1rem;
+        & > .art-container {
+            margin-top: 2rem; 
+        }
+
+        & img + p, & pre + a {
+            margin-top: 0.5rem;
+        }
     }
 }
